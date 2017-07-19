@@ -23,10 +23,6 @@ class SettingCrudController extends CrudController
                 'label' => trans('backpack::settings.name'),
             ],
             [
-                'name'  => 'value',
-                'label' => trans('backpack::settings.value'),
-            ],
-            [
                 'name'  => 'description',
                 'label' => trans('backpack::settings.description'),
             ],
