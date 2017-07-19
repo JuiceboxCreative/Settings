@@ -75,6 +75,7 @@ class SettingCrudController extends CrudController
         $this->crud->addField((array) json_decode($this->data['entry']->field)); // <---- this is where it's different
         $this->data['crud'] = $this->crud;
         $this->data['saveAction'] = $this->getSaveAction();
+        $this->data['returnUrl'] = $this->getReturnUrl();
         $this->data['fields'] = $this->crud->getUpdateFields($id);
         $this->data['title'] = trans('backpack::crud.edit').' '.$this->crud->entity_name;
 
