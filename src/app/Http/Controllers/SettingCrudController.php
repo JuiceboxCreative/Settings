@@ -86,6 +86,33 @@ class SettingCrudController extends CrudController
 
     public function update(UpdateRequest $request)
     {
-        return parent::updateCrud();
+        $request->request->set('value', json_encode($request->get('value')));
+
+        $this->crud->hasAccessOrFail('update');
+
+        // fallback to global request instance
+        if (is_null($request)) {
+            $request = \Request::instance();
+        }
+
+        // replace empty values with NULL, so that it will work with MySQL strict mode on
+        foreach ($request->input() as $key => $value) {
+            if (empty($value) && $value !== '0') {
+                $request->request->set($key, null);
+            }
+        }
+
+        // update the row in the db
+        $item = $this->crud->update($request->get($this->crud->model->getKeyName()),
+            $request->except('return_url', 'save_action', '_token', '_method'));
+        $this->data['entry'] = $this->crud->entry = $item;
+
+        // show a success message
+        \Alert::success(trans('backpack::crud.update_success'))->flash();
+
+        // save the redirect choice for next time
+        $this->setSaveAction();
+
+        return $this->performSaveAction($item->getKey());
     }
 }
