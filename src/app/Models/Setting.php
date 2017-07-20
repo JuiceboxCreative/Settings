@@ -18,7 +18,7 @@ class Setting extends Model
         $decoded = json_decode($this->attributes['value']);
         $field = json_decode($this->attributes['field']);
 
-        if ($field->type == 'select2_multiple') {
+        if ($field->type == 'select2_multiple' && is_array($decoded)) {
             $return = new Collection();
             foreach ($decoded as $value) {
                 $model = $field->model::find($value);
@@ -31,6 +31,6 @@ class Setting extends Model
             return $return;
         }
 
-        return $this->attributes['value'];
+        return new Collection();
     }
 }
